@@ -34,7 +34,7 @@ export default function linkPop(props) {
           alignItems="center"
         >
           <h1> Link Copied!</h1>
-          <h2 class="link"> {props.link}</h2>
+          <Link href={props.link}> {props.link}</Link>
         </Grid>
       </Backdrop>
     </div>
