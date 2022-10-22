@@ -13,7 +13,8 @@ const RoomSchema = new Schema({
     timeIn: {type:Date, default:Date.now},
     timeOut: {type:Date},
     phoneNumber: {type:String},
-    university: {type:String}
+    university: {type:String},
+    isAvailable: {type:Boolean, default:true}
 });
 
 // Export model
