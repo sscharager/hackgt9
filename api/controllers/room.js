@@ -1,6 +1,6 @@
 const Room = require('../models/room');
 
-exports.newRoom = async function(req, res, next) {
+exports.scanQR = async function(req, res, next) {
     // Default response object
     var response = {ok:true};
 
