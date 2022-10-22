@@ -6,7 +6,7 @@ const staffController = require('../controllers/staff');
 
 
 // put all endpoints here
-
+router.post('/register', staffController.register);
 
 
 module.exports = router;

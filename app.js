@@ -2,15 +2,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const path = require('path');
+
 
 // Set constants
 const C = require('./constants.js');
 
 // Create and configure express app
 const app = express();
-
-const expressWs = require('express-ws')(app);
-app.wsInstance = expressWs;
 
 app.set('port', C.PORT);
 app.use(cors());
@@ -26,7 +25,22 @@ app.use((req, res, next) =>
 });
 
 // Configure API routes
-const userRouter = require('./api/routes/staff');
+const staffRouter = require('./api/routes/staff');
 app.use('/api/staff', staffRouter);
 const userRouter = require('./api/routes/room');
 app.use('/api/room', userRouter);
+
+
+app.get('*', (req, res) =>
+    {
+        res.sendFile(path.resolve(__dirname, 'my-app', 'build', 'index.html'));
+    });
+
+// // Configure paths for static files
+// if(process.env.NODE_ENV === 'production')
+// {
+//     // app.use(express.static('my-app/build'));
+    
+// }
+
+module.exports = app;

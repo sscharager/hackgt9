@@ -1,5 +1,6 @@
 // Create and configure MongoDB connection with mongoose
 const C = require('./constants.js');
+const app = require('./app');
 const mongoose = require('mongoose');
 
 mongoose.connect(C.MONGODB_URI, {useNewUrlParser:true, useUnifiedTopology:true});
