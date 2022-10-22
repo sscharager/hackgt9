@@ -1,41 +1,110 @@
 const Room = require('../models/room');
+require('dotenv').config();
 
-exports.scanQR = async function(req, res, next) {
+exports.sendText = async function(req, res, next) {
     // Default response object
     var response = {ok:true};
 
-    // Incoming values
-    const longitude = req.body.longitude;
-    const latitude = req.body.latitude;
+    // Required incoming values
     const buildingName = req.body.buildingName;
     const roomNumber = req.body.roomNumber;
-    const seatsTotal = req.body.seatsTotal;
-    const university = req.body.university;
+    const phoneNumber = 1 + req.body.phoneNumber;
+    const roomID = req.body.roomID;
 
-    // Create a new instance of post model
-    var newRoom = new Room({
-        longitude: longitude,
-        latitude: latitude,
-        buildingName: buildingName,
-        roomNumber: roomNumber,
-        seatsTotal: seatsTotal,
-        university: university
-    });
 
-    // Save the new instance
-    newRoom.save(function (err) {
-        // If an error occurs, return ok:false and the error message
-        if(err)
-        {
-            response.ok = false;
-            response.error = err;
-            res.status(200).json(response);
+    const filter = {_id: roomID};
+
+    var currentDateObj = new Date();
+    var addMlSeconds = 60 * 60 * 1000;
+    var newDateObj = new Date(currentDateObj + addMlSeconds);
+
+    try {
+        // Searches for user based on the roomID provided after the link
+        const room = await Room.findOne({_id: roomID});
+        if (room) {
+            // Sets the user's email token to null and verified to true if link is pressed
+            room.timeIn = currentDateObj;
+            room.timeOut = newDateObj;
+            room.seatsAvailable = room.seatsTotal;
+
+            room.save(function (err) {
+                if(err)
+                {
+                    response.ok = false;
+                    response.error = err;
+                    res.status(200).json(response);
+                }
+            });
         }
-        // Otherwise return a success message
         else
         {
-            response.roomID = newRoom._id;
+            // If user not found, then error return.
+            response.ok = false;
+            response.error = "Room not found";
             res.status(200).json(response);
         }
-    });
+
+    } catch (err) {
+        response.ok = false;
+        response.error = err.message;
+        res.status(200).json(response);
+    }
+
+    const client = require('twilio')(
+        process.env.TWILIO_ACCOUNT_SID,
+        process.env.TWILIO_AUTH_TOKEN
+    );
+
+    client.messages.create({
+        from: process.env.TWILIO_PHONE_NUMBER,
+        to: phoneNumber,
+        body:`You have successfully reserved ` + buildingName + `-` + roomNumber + ` for the next 30 minutes!\nSend the following link to your friends to show them room information and for them to enroll.\nhttp://localhost:5000/api/room/addMember?roomID=${roomID}`
+    }).then((messsage) => console.log(message.sid));
+
+
+    // <p>You have successfully reserved ` + buildingName + `-` + roomNumber + ` for the next 30 minutes!</p>
+        // <p>Send the following link to your friends to show them room information and for them to enroll.</p>
+        // <a href = http://localhost:5000/api/room/addMember?roomID=${roomID}>Link</a>
+    res.status(200).json(response);
+}
+
+exports.addMember = async function(req, res, next) {
+    // Default response object
+    var response = {ok:true};
+
+    try {
+        // Searches for user based on the roomID provided after the link
+        const room = await Room.findOne({_id: req.query.roomID});
+        if (room) {
+            // Sets the user's email token to null and verified to true if link is pressed
+            room.seatsAvailable -= 1;
+
+            room.save(function (err) {
+                if(err)
+                {
+                    response.ok = false;
+                    response.error = err;
+                    res.status(200).json(response);
+                }
+                else
+                {
+                    response.ok = true;
+                    response.status = "Added to room";
+                    res.status(200).json(response);
+                }
+            });
+        }
+        else
+        {
+            // If user not found, then error return.
+            response.ok = false;
+            response.error = "Room not found";
+            res.status(200).json(response);
+        }
+
+    } catch (err) {
+        response.ok = false;
+        response.error = err.message;
+        res.status(200).json(response);
+    }
 }
