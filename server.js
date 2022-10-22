@@ -11,7 +11,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 // Set up loop
 Room.runUpdateLoop();
-setInterval(Room.runUpdateLoop, 10 * 60 * 1000); // 10 Minutes
+setInterval(Room.runUpdateLoop, 1 * 60 * 1000); // 10 Minutes
 
 // Begin listening on relevant port
 const server = app.listen(C.PORT, () =>
