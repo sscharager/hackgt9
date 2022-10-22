@@ -22,7 +22,7 @@ exports.sendText = async function(req, res, next) {
 
     var oldDateObj = new Date();
     var newDateObj = new Date();
-    newDateObj.setTime(oldDateObj.getTime() + (60 * 60 * 1000));
+    newDateObj.setTime(oldDateObj.getTime() + (10 * 60 * 1000));
 
     try {
         // Searches for user based on the roomID provided after the link
@@ -33,6 +33,8 @@ exports.sendText = async function(req, res, next) {
             room2.timeOut = newDateObj;
             room2.seatsAvailable = room2.seatsTotal;
             room2.isAvailable = false;
+            room2.isReminderSent = false;
+            room2.phoneNumber = phoneNumber;
 
             room2.save(function (err) {
                 if(err)
@@ -149,4 +151,73 @@ exports.getSingleRoom = async function(req, res, next) {
 
     response.room = room;
     res.status(200).json(response);
+}
+
+exports.runUpdateLoop = async function(req, res, next) {
+    console.log("Running");
+    // Attempt to find a user with matching username/password
+    const filter = {isAvailable: false};
+    // const projection = {_id: 1, username: 1, profileImageUrl: 1, followers: 1};
+    const room = await Room.find(filter);
+
+    for (var i = 0; i < room.length; i++) {
+        var dateObj = new Date();
+        // Reset room
+        if (room[i].timeOut <= dateObj) {
+            console.log("out of time");
+            room[i].timeIn = null;
+            room[i].timeOut = null;
+            room[i].seatsAvailable = room[i].seatsTotal;
+            room[i].isAvailable = true;
+            room[i].isReminderSent = false;
+
+            room[i].save(function (err) {
+                if(err)
+                {
+                    response.ok = false;
+                    response.error = err;
+                    res.status(200).json(response);
+                } else {
+                    const client = require('twilio')(
+                        process.env.TWILIO_ACCOUNT_SID,
+                        process.env.TWILIO_AUTH_TOKEN
+                    );
+
+                    client.messages.create({
+                        from: process.env.TWILIO_PHONE_NUMBER,
+                        to: room[i].phoneNumber,
+                        body:`You have ran out of time`
+                    }).then((messsage) => console.log(message.sid));
+                }
+            });
+        } else {
+            var newDateObj = new Date();
+            newDateObj.setTime(dateObj.getTime() + (10 * 60 * 1000));
+
+            // Send reminder
+            if (room[i].timeOut <= newDateObj && room[i].isReminderSent == false) {
+                const client = require('twilio')(
+                    process.env.TWILIO_ACCOUNT_SID,
+                    process.env.TWILIO_AUTH_TOKEN
+                );
+
+                client.messages.create({
+                    from: process.env.TWILIO_PHONE_NUMBER,
+                    to: room[i].phoneNumber,
+                    body:`You have 10 minutes left to extend your time (link)`
+                }).then((messsage) => console.log(message.sid));
+
+                room[i].isReminderSent = true;
+
+                room[i].save(function (err) {
+                    if(err)
+                    {
+                        response.ok = false;
+                        response.error = err;
+                        res.status(200).json(response);
+                      }
+                });
+            }
+        }
+    }
 }
