@@ -32,15 +32,8 @@ app.use('/api/room', userRouter);
 
 
 app.get('*', (req, res) =>
-    {
-        res.sendFile(path.resolve(__dirname, 'my-app', 'build', 'index.html'));
-    });
-
-// // Configure paths for static files
-// if(process.env.NODE_ENV === 'production')
-// {
-//     // app.use(express.static('my-app/build'));
-    
-// }
+{
+    res.sendFile(path.resolve(__dirname, 'my-app', 'build', 'index.html'));
+});
 
 module.exports = app;

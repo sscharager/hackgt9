@@ -65,3 +65,43 @@ exports.register = async function(req, res, next) {
         }
     });
 }
+
+
+exports.login = async function(req, res, next) {
+    // Default response object
+    var response = {ok:true};
+
+    // Required incoming values
+    const email = req.body.email;
+    const password = req.body.password;
+    
+    if (email == null)
+    {
+        response.ok = false;
+        response.error = 'email null';
+        return res.status(200).json(response);
+    }
+    if (password == null)
+    {
+        response.ok = false;
+        response.error = 'password null';
+        return res.status(200).json(response);
+    }
+
+    // Attempt to find a user with matching username/password
+    const filter = {email: email, password: password};
+    const staff = await Staff.findOne(filter);
+
+    if(staff)
+    {
+        response.staff = staff.toJSON();
+        res.status(200).json(response);
+    }
+    else
+    {
+        response.ok = false;
+        response.error = 'Invalid email or password';
+        res.status(200).json(response);
+    }
+
+}
