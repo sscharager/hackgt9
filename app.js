@@ -26,5 +26,7 @@ app.use((req, res, next) =>
 });
 
 // Configure API routes
-const userRouter = require('./api/routes/user');
-app.use('/api/user', userRouter);
+const userRouter = require('./api/routes/staff');
+app.use('/api/staff', staffRouter);
+const userRouter = require('./api/routes/room');
+app.use('/api/room', userRouter);
