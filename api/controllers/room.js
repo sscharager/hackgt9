@@ -116,3 +116,37 @@ exports.addMember = async function(req, res, next) {
         res.status(200).json(response);
     }
 }
+
+
+
+exports.getAvailableRooms = async function(req, res, next) {
+    // Default response object
+    var response = {ok:true};
+
+    // Incoming values
+    const university = req.body.university;
+
+    // Attempt to find a user with matching username/password
+    const filter = {university: university, isAvailable: true};
+    // const projection = {_id: 1, username: 1, profileImageUrl: 1, followers: 1};
+    const rooms = await Room.find(filter);
+
+    response.rooms = rooms;
+    res.status(200).json(response);
+}
+
+exports.getSingleRoom = async function(req, res, next) {
+    // Default response object
+    var response = {ok:true};
+
+    // Incoming values
+    const roomID = req.body.roomID;
+
+    // Attempt to find a user with matching username/password
+    const filter = {_id: roomID};
+    // const projection = {_id: 1, username: 1, profileImageUrl: 1, followers: 1};
+    const room = await Room.findOne(filter);
+
+    response.room = room;
+    res.status(200).json(response);
+}
