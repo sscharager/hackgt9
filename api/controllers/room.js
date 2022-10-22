@@ -11,23 +11,30 @@ exports.sendText = async function(req, res, next) {
     const phoneNumber = 1 + req.body.phoneNumber;
     const roomID = req.body.roomID;
 
-
     const filter = {_id: roomID};
 
-    var currentDateObj = new Date();
-    var addMlSeconds = 60 * 60 * 1000;
-    var newDateObj = new Date(currentDateObj + addMlSeconds);
+    const room = await Room.findOne({_id: roomID});
+    if (room.isAvailable == false) {
+        response.ok = false;
+        response.error = "Room is unavailable";
+        return res.status(200).json(response);
+    }
+
+    var oldDateObj = new Date();
+    var newDateObj = new Date();
+    newDateObj.setTime(oldDateObj.getTime() + (60 * 60 * 1000));
 
     try {
         // Searches for user based on the roomID provided after the link
-        const room = await Room.findOne({_id: roomID});
-        if (room) {
+        const room2 = await Room.findOne({_id: roomID});
+        if (room2) {
             // Sets the user's email token to null and verified to true if link is pressed
-            room.timeIn = currentDateObj;
-            room.timeOut = newDateObj;
-            room.seatsAvailable = room.seatsTotal;
+            room2.timeIn = oldDateObj;
+            room2.timeOut = newDateObj;
+            room2.seatsAvailable = room2.seatsTotal;
+            room2.isAvailable = false;
 
-            room.save(function (err) {
+            room2.save(function (err) {
                 if(err)
                 {
                     response.ok = false;
