@@ -1,6 +1,6 @@
 const Room = require('../models/room');
 
-exports.newPost = async function(req, res, next) {
+exports.newRoom = async function(req, res, next) {
     // Default response object
     var response = {ok:true};
 
@@ -13,14 +13,17 @@ exports.newPost = async function(req, res, next) {
     const university = req.body.university;
 
     // Create a new instance of post model
-    var newPost = new Post({
-        playlistID: playlistID,
-        caption: caption,
-        author: userID
+    var newRoom = new Room({
+        longitude: longitude,
+        latitude: latitude,
+        buildingName: buildingName,
+        roomNumber: roomNumber,
+        seatsTotal: seatsTotal,
+        university: university
     });
 
     // Save the new instance
-    newPost.save(function (err) {
+    newRoom.save(function (err) {
         // If an error occurs, return ok:false and the error message
         if(err)
         {
@@ -31,7 +34,7 @@ exports.newPost = async function(req, res, next) {
         // Otherwise return a success message
         else
         {
-            response.postID = newPost._id;
+            response.roomID = newRoom._id;
             res.status(200).json(response);
         }
     });
