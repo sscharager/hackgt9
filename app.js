@@ -30,10 +30,15 @@ app.use('/api/staff', staffRouter);
 const userRouter = require('./api/routes/room');
 app.use('/api/room', userRouter);
 
-
-app.get('*', (req, res) =>
+// Configure paths for static files
+if(process.env.NODE_ENV === 'production')
 {
-    res.sendFile(path.resolve(__dirname, 'my-app', 'build', 'index.html'));
-});
+    app.use(express.static('my-app/build'));
+    app.get('*', (req, res) =>
+    {
+        res.sendFile(path.resolve(__dirname, 'my-app', 'build', 'index.html'));
+    });
+}
+
 
 module.exports = app;

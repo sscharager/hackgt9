@@ -64,7 +64,7 @@ exports.sendText = async function(req, res, next) {
 
     // <p>You have successfully reserved ` + buildingName + `-` + roomNumber + ` for the next 30 minutes!</p>
         // <p>Send the following link to your friends to show them room information and for them to enroll.</p>
-        // <a href = http://localhost:5000/api/room/addMember?roomID=${roomID}>Link</a>
+        // <a href = http://qrstudy.herokuapp.com/api/room/addMember?roomID=${roomID}>Link</a>
     res.status(200).json(response);
 }
 
@@ -75,7 +75,7 @@ exports.addMember = async function(req, res, next) {
     try {
         // Searches for user based on the roomID provided after the link
         const room = await Room.findOne({_id: req.query.roomID});
-        if (room) {
+        if (room && room.seatsAvailable > 0) {
             // Sets the user's email token to null and verified to true if link is pressed
             room.seatsAvailable -= 1;
 
@@ -90,6 +90,7 @@ exports.addMember = async function(req, res, next) {
                 {
                     response.ok = true;
                     response.status = "Added to room";
+                    response.room = room;
                     res.status(200).json(response);
                 }
             });
@@ -98,7 +99,7 @@ exports.addMember = async function(req, res, next) {
         {
             // If user not found, then error return.
             response.ok = false;
-            response.error = "Room not found";
+            response.error = "Room not found or not enough seats";
             res.status(200).json(response);
         }
 
