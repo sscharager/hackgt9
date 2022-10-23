@@ -4,6 +4,7 @@ import { Formik, Field, Form } from "formik";
 
 import AuthService from "../services/auth.service";
 
+
 type Props = {};
 
 type State = {
@@ -51,13 +52,13 @@ export default class Home extends Component<Props, State> {
     };
 
     return (
-      <div className="col-md-12">
+      <div className="container">
+      <div className = "row align-items-center">
+
+      <div className = "col-lg-6">
         <div className="card card-container">
-          <img
-            src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-            alt="profile-img"
-            className="profile-img-card"
-          />
+        <h2> Students </h2>
+
           <Formik
             initialValues = {initialValues}
             onSubmit={this.handleUniversity}
@@ -71,7 +72,7 @@ export default class Home extends Component<Props, State> {
 
               <div className="form-group">
                 <button type="submit" className="btn btn-primary btn-block">
-                  <span>Submit</span>
+                  <span>Find Rooms</span>
                 </button>
               </div>
 
@@ -84,20 +85,27 @@ export default class Home extends Component<Props, State> {
               )}
             </Form>
           </Formik>
-            <h2>Are you a staff? Log in or register below.</h2>
-
-            <div className="form-group">
-            <button type="submit" className="btn btn-primary btn-block">
-                <span>Login</span>
-            </button>
-            </div>
-
-            <div className="form-group">
-            <button type="submit" className="btn btn-primary btn-block">
-                <span>Register</span>
-            </button>
-            </div>
         </div>
+        </div>
+            <div className="col-md-6">
+              <div className="card card-container">
+
+                <h2>Staff</h2>
+
+                <div className="form-group">
+                <button type="submit" className="btn btn-primary btn-block">
+                    <span>Login</span>
+                </button>
+                </div>
+
+                <div className="form-group">
+                <button type="submit" className="btn btn-primary btn-block">
+                    <span>Register</span>
+                </button>
+                </div>
+              </div>
+            </div>
+            </div>
       </div>
     );
   }

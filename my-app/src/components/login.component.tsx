@@ -60,11 +60,7 @@ export default class Login extends Component<Props, State> {
     return (
       <div className="col-md-12">
         <div className="card card-container">
-          <img
-            src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-            alt="profile-img"
-            className="profile-img-card"
-          />
+          <h2> Log in </h2>
           <Formik
             initialValues={initialValues}
             onSubmit={this.handleLogin}
@@ -81,7 +77,7 @@ export default class Login extends Component<Props, State> {
               </div>
 
               <div className="form-group">
-                <button type="submit" className="btn btn-primary btn-block">
+                <button type="submit" className="btn btn-primary btn-block purple">
                   <span>Login</span>
                 </button>
               </div>

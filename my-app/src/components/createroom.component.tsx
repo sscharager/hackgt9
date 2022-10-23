@@ -8,7 +8,7 @@ type Props = {};
 
 type State = {
   redirect: string | null,
-  buildingName: string, 
+  buildingName: string,
   roomNumber: string,
   seatsTotal: number,
   university: string,
@@ -23,9 +23,9 @@ export default class CreateRoom extends Component<Props, State> {
 
     this.state = {
       redirect: null,
-      buildingName: "", 
-      roomNumber: "", 
-      seatsTotal: 0, 
+      buildingName: "",
+      roomNumber: "",
+      seatsTotal: 0,
       university: "",
       successful: false,
       message: ""
@@ -57,20 +57,16 @@ export default class CreateRoom extends Component<Props, State> {
     const { message } = this.state;
 
     const initialValues = {
-        buildingName: "", 
-        roomNumber: "", 
-        seatsTotal: 0, 
+        buildingName: "",
+        roomNumber: "",
+        seatsTotal: 0,
         university: ""
     };
 
     return (
       <div className="col-md-12">
         <div className="card card-container">
-          <img
-            src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-            alt="profile-img"
-            className="profile-img-card"
-          />
+        <h1> Create a New Room</h1>
           <Formik
             initialValues={initialValues}
             onSubmit={this.handleCreateRoom}

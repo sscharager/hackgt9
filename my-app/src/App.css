@@ -5,7 +5,26 @@ label {
 
 .card-container.card {
   max-width: 350px !important;
+  min-height: 300px;
   padding: 40px 40px;
+  background-color: #F4F4F4;
+  align-content: center;
+}
+h2{
+  text-decoration: underline;
+
+}
+body{
+  background-color: #4E7AA6;
+  background-image: url('../public/StudyBackground.png');
+  background-position: center;
+  background-blend-mode: lighten;
+  align-content: space-between;
+}
+.btn-block{
+  background-color: #8075FF;
+  border-color: #A299FF;
+
 }
 
 .card {
