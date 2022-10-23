@@ -3,13 +3,13 @@ import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Grid from "@mui/material/Grid";
 import BuildingInfo from './componets/buildingInfo';
-import Header from './componets/Header'
+import Header from './componets/header.tsx'
 
 export default function TimeMenu(props) {
   return (
     <div>
     <Header/>
-    </BuildingInfo/>
+    <BuildingInfo/>
     <Grid
       container
       spacing={2}
