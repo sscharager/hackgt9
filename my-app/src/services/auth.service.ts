@@ -47,6 +47,16 @@ class AuthService {
         return response.data;
       });
   }
+
+  sendTextMessage(phoneNumber: string, roomID: string) {
+    return axios.post(API_URL + "room/sendText", {
+        phoneNumber,
+        roomID
+      })
+      .then(response => {
+        return response.data;
+      });
+  }
 }
 
 export default new AuthService();

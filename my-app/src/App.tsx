@@ -10,6 +10,8 @@ import Login from "./components/login.component";
 import Register from "./components/register.component";
 import CreateRoom from "./components/createroom.component";
 import Home from "./components/home.component";
+import PhoneNumber from "./components/phoneNumber.component";
+
 // import Profile from "./components/profile.component";
 // import BoardUser from "./components/board-user.component";
 // import BoardModerator from "./components/board-moderator.component";
@@ -72,15 +74,12 @@ class App extends Component<Props, State> {
         
         <div className="container mt-3">
           <Routes>
-            {/* <Route path="/" element={<Home />} /> */}
+            <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/createRoom" element={<CreateRoom />} />
-            {/* <Route path="/profile" element={<Profile />} />
-            <Route path="/user" element={<BoardUser />} />
-            <Route path="/mod" element={<BoardModerator />} />
-            <Route path="/admin" element={<BoardAdmin />} /> */}
+            <Route path="/QR" element={<PhoneNumber />} />
           </Routes>
         </div>
 

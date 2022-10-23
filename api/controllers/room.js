@@ -6,8 +6,7 @@ exports.sendText = async function(req, res, next) {
     var response = {ok:true};
 
     // Required incoming values
-    const buildingName = req.body.buildingName;
-    const roomNumber = req.body.roomNumber;
+    
     const phoneNumber = 1 + req.body.phoneNumber;
     const roomID = req.body.roomID;
 
@@ -19,6 +18,9 @@ exports.sendText = async function(req, res, next) {
         response.error = "Room is unavailable";
         return res.status(200).json(response);
     }
+
+    const buildingName = room.buildingName;
+    const roomNumber = room.roomNumber;
 
     var oldDateObj = new Date();
     var newDateObj = new Date();
@@ -67,7 +69,7 @@ exports.sendText = async function(req, res, next) {
     client.messages.create({
         from: process.env.TWILIO_PHONE_NUMBER,
         to: phoneNumber,
-        body:`You have successfully reserved ` + buildingName + `-` + roomNumber + ` for the next 30 minutes!\nSend the following link to your friends to show them room information and for them to enroll.\nhttp://localhost:5000/api/room/addMember?roomID=${roomID}`
+        body:`You have successfully reserved ` + buildingName + `-` + roomNumber + ` for the next 30 minutes!\nSend the following link to your friends to show them room information and for them to enroll.\nhttps://qrstudy.herokuapp.com/api/room/addMember?roomID=${roomID}`
     }).then((messsage) => console.log(message.sid));
 
 
